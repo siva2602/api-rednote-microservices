@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+keys/*.pem
+keys/private.pem
+keys/public.pem
+test/fixtures/pg-data/
+test/fixtures/keys/
+.DS_Store

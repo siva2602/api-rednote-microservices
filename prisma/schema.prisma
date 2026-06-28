@@ -1,0 +1,36 @@
+// Prisma schema for the auth microservice — users and refresh token storage.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email         String         @unique @db.VarChar(255)
+  username      String         @unique @db.VarChar(50)
+  password_hash String         @map("password_hash")
+  role          String         @default("user") @db.VarChar(20)
+  created_at    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updated_at    DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  refresh_tokens RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @map("user_id") @db.Uuid
+  token_hash String   @map("token_hash")
+  expires_at DateTime @map("expires_at") @db.Timestamptz(6)
+  created_at DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  revoked    Boolean  @default(false)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([token_hash])
+  @@index([user_id])
+  @@map("refresh_tokens")
+}

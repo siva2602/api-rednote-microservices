@@ -1,0 +1,1 @@
+/home/ck-soft/Documents/Code/rednote/api/node_modules/@embedded-postgres/linux-x64/native/bin/postgres "-D" "/home/ck-soft/Documents/Code/rednote/api/test/fixtures/pg-dev-data" "-p" "5433"
